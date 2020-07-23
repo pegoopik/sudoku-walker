@@ -1,13 +1,16 @@
 package com.pegoopik.sudoku.solver.pojo;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Data
+@Getter
+@Setter
 public class Sudoku {
     // Список всех ячеек, он в некотором смысле излишен, может быть удобен в некоторых правилах
     private Map<PointXY, Cell> cells = new HashMap<>();
@@ -35,18 +38,16 @@ public class Sudoku {
             columns.add(createGroupAndUpdateCells(GroupType.COLUMN, 1, 9, groupIndex, groupIndex));
         }
         // И соответственно для квадратов. Тут чуть муторней
-        squares.add(createGroupAndUpdateCells(GroupType.SQUARE, 1, 3, 1, 3));
-        squares.add(createGroupAndUpdateCells(GroupType.SQUARE, 4, 6, 1, 3));
-        squares.add(createGroupAndUpdateCells(GroupType.SQUARE, 7, 9, 1, 3));
-        squares.add(createGroupAndUpdateCells(GroupType.SQUARE, 1, 3, 4, 6));
-        squares.add(createGroupAndUpdateCells(GroupType.SQUARE, 4, 6, 4, 6));
-        squares.add(createGroupAndUpdateCells(GroupType.SQUARE, 7, 9, 4, 6));
-        squares.add(createGroupAndUpdateCells(GroupType.SQUARE, 1, 3, 7, 9));
-        squares.add(createGroupAndUpdateCells(GroupType.SQUARE, 4, 6, 7, 9));
-        squares.add(createGroupAndUpdateCells(GroupType.SQUARE, 7, 9, 7, 9));
+        for (int groupIndexX = 1; groupIndexX <= 7; groupIndexX += 3) {
+            for (int groupIndexY = 1; groupIndexY <= 7; groupIndexY += 3) {
+                squares.add(createGroupAndUpdateCells(GroupType.SQUARE,
+                        groupIndexX, groupIndexX + 2, groupIndexY, groupIndexY + 2));
+            }
+        }
     }
 
-    private Group createGroupAndUpdateCells(GroupType groupType, Integer fromX, Integer toX, Integer fromY, Integer toY) {
+    private Group createGroupAndUpdateCells(GroupType groupType,
+                                            Integer fromX, Integer toX, Integer fromY, Integer toY) {
         Group group = new Group();
         group.setType(groupType);
         for (int i = fromX; i <= toX; i++) {

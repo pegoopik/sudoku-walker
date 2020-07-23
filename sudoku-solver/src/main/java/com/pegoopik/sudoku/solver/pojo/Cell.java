@@ -1,12 +1,14 @@
 package com.pegoopik.sudoku.solver.pojo;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Arrays;
 import java.util.Set;
 import java.util.TreeSet;
 
-@Data
+@Getter
+@Setter
 public class Cell {
     private PointXY coordinates;
     private Integer value = 0;
