@@ -16,5 +16,5 @@ public class Cell {
     private Group line;
     private Group column;
     private Group square;
-    private CellStatus status = CellStatus.NONE;
+    private CellStatus status = CellStatus.PROGRESS;
 }

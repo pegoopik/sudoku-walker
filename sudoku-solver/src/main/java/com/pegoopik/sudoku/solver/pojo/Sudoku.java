@@ -57,9 +57,10 @@ public class Sudoku {
             for (int j = 1; j <= SUDOKU_ROW_COUNT; j++) {
                 int valuesIndex = (i-1) + SUDOKU_ROW_COUNT * (j-1);
                 Integer currentValue = values.get(valuesIndex);
+                PointXY coordinates = PointXY.of(i, j);
                 if (currentValue >= 1 && currentValue <= SUDOKU_ROW_COUNT) {
                     removeAvailableCount +=
-                            updateCellValue(PointXY.of(i, j), currentValue, CellStatus.FINAL);
+                            updateCellValue(coordinates, currentValue, CellStatus.FINAL);
                 }
             }
         }
@@ -71,15 +72,23 @@ public class Sudoku {
         cell.setValue(value);
         cell.setStatus(status);
         cell.getAvailableValues().clear();
-        return removeAvailablesValuesFromLinkedCells(cell, value);
+        return removeAvailablesValuesFromLinkedCells(cell);
     }
 
-    private int removeAvailablesValuesFromLinkedCells(Cell cell, Integer value) {
+    public int removeAvailablesValuesFromLinkedCells(Cell cell) {
         int removeAvailableCount = 0;
-        for (Cell linkedCell : cell.getSquare().getCells().values()) {
-            if (linkedCell.getAvailableValues().contains(value)) {
+        removeAvailableCount += removeAvailablesValuesFromLinkedCells(cell, cell.getLine());
+        removeAvailableCount += removeAvailablesValuesFromLinkedCells(cell, cell.getColumn());
+        removeAvailableCount += removeAvailablesValuesFromLinkedCells(cell, cell.getSquare());
+        return removeAvailableCount;
+    }
+
+    private int removeAvailablesValuesFromLinkedCells(Cell cell, Group group) {
+        int removeAvailableCount = 0;
+        for (Cell linkedCell : group.getCells().values()) {
+            if (linkedCell.getAvailableValues().contains(cell.getValue())) {
                 removeAvailableCount++;
-                linkedCell.getAvailableValues().remove(value);
+                linkedCell.getAvailableValues().remove(cell.getValue());
             }
         }
         return removeAvailableCount;
