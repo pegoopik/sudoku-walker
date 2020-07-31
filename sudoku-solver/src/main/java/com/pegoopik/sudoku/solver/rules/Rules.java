@@ -10,7 +10,7 @@ public class Rules {
         int removeAvailableCount = 0;
         for (Cell cell : sudoku.getCells().values()) {
             if (!cell.getValue().equals(0)) {
-                removeAvailableCount += sudoku.removeAvailablesValuesFromLinkedCells(cell);
+                removeAvailableCount += sudoku.removeAvailableValuesFromLinkedCells(cell);
             }
         }
         return removeAvailableCount;

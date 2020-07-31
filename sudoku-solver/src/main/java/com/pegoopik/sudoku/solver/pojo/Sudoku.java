@@ -10,10 +10,11 @@ import java.util.*;
 @Setter
 public class Sudoku {
 
-    private static int SUDOKU_ROW_COUNT = 9;
+    public static int SUDOKU_SQUARE_SIZE = 3;
+    public static int SUDOKU_ROW_COUNT = SUDOKU_SQUARE_SIZE * SUDOKU_SQUARE_SIZE;
 
     // Список всех ячеек, он в некотором смысле излишен, может быть удобен в некоторых правилах
-    private Map<PointXY, Cell> cells = new HashMap<>();
+    private Map<PointXY, Cell> cells = new TreeMap<>();
     // Списки из 9 элементов групп по 9 ячеек. строки / столбцы / квадраты
     private List<Group> lines = new ArrayList<>();
     private List<Group> columns = new ArrayList<>();
@@ -21,8 +22,8 @@ public class Sudoku {
 
     public Sudoku() {
         // Создадим ячейки (координаты от 1 до 9, а не от 0 до 8 намеренно)
-        for (int i = 1; i <= 9; i++) {
-            for (int j = 1; j <= 9; j++) {
+        for (int i = 1; i <= SUDOKU_ROW_COUNT; i++) {
+            for (int j = 1; j <= SUDOKU_ROW_COUNT; j++) {
                 PointXY pointXY = PointXY.of(i, j);
                 Cell cell = new Cell();
                 cell.setCoordinates(pointXY);
@@ -30,18 +31,20 @@ public class Sudoku {
             }
         }
         // Заполним строки(группы) ячейками
-        for (int groupIndex = 1; groupIndex < 10; groupIndex++) {
-            lines.add(createGroupAndUpdateCells(GroupType.LINE, groupIndex, groupIndex, 1, 9));
+        for (int groupIndex = 1; groupIndex <= SUDOKU_ROW_COUNT; groupIndex++) {
+            lines.add(createGroupAndUpdateCells(GroupType.LINE, 1, SUDOKU_ROW_COUNT, groupIndex, groupIndex));
         }
         // То же самое для столбцов
-        for (int groupIndex = 1; groupIndex < 10; groupIndex++) {
-            columns.add(createGroupAndUpdateCells(GroupType.COLUMN, 1, 9, groupIndex, groupIndex));
+        for (int groupIndex = 1; groupIndex <= SUDOKU_ROW_COUNT; groupIndex++) {
+            columns.add(createGroupAndUpdateCells(GroupType.COLUMN, groupIndex, groupIndex, 1, SUDOKU_ROW_COUNT));
         }
         // И соответственно для квадратов. Тут чуть муторней
-        for (int groupIndexX = 1; groupIndexX <= 7; groupIndexX += 3) {
-            for (int groupIndexY = 1; groupIndexY <= 7; groupIndexY += 3) {
+        for (int groupIndexY = 1; groupIndexY < SUDOKU_ROW_COUNT; groupIndexY += SUDOKU_SQUARE_SIZE)
+            for (int groupIndexX = 1; groupIndexX < SUDOKU_ROW_COUNT; groupIndexX += SUDOKU_SQUARE_SIZE) {
+             {
                 squares.add(createGroupAndUpdateCells(GroupType.SQUARE,
-                        groupIndexX, groupIndexX + 2, groupIndexY, groupIndexY + 2));
+                        groupIndexX, groupIndexX + SUDOKU_SQUARE_SIZE - 1,
+                        groupIndexY, groupIndexY + SUDOKU_SQUARE_SIZE - 1));
             }
         }
     }
@@ -58,6 +61,7 @@ public class Sudoku {
                 int valuesIndex = (i-1) + SUDOKU_ROW_COUNT * (j-1);
                 Integer currentValue = values.get(valuesIndex);
                 PointXY coordinates = PointXY.of(i, j);
+                System.out.println("" + i + "-" + j + "=" + valuesIndex + "; " + currentValue + "; " + coordinates);
                 if (currentValue >= 1 && currentValue <= SUDOKU_ROW_COUNT) {
                     removeAvailableCount +=
                             updateCellValue(coordinates, currentValue, CellStatus.FINAL);
@@ -72,18 +76,32 @@ public class Sudoku {
         cell.setValue(value);
         cell.setStatus(status);
         cell.getAvailableValues().clear();
-        return removeAvailablesValuesFromLinkedCells(cell);
+        return removeAvailableValuesFromLinkedCells(cell);
     }
 
-    public int removeAvailablesValuesFromLinkedCells(Cell cell) {
+    public int removeAvailableValuesFromLinkedCells(Cell cell) {
         int removeAvailableCount = 0;
-        removeAvailableCount += removeAvailablesValuesFromLinkedCells(cell, cell.getLine());
-        removeAvailableCount += removeAvailablesValuesFromLinkedCells(cell, cell.getColumn());
-        removeAvailableCount += removeAvailablesValuesFromLinkedCells(cell, cell.getSquare());
+        removeAvailableCount += removeAvailableValuesFromLinkedCells(cell, cell.getLine());
+        removeAvailableCount += removeAvailableValuesFromLinkedCells(cell, cell.getColumn());
+        removeAvailableCount += removeAvailableValuesFromLinkedCells(cell, cell.getSquare());
         return removeAvailableCount;
     }
 
-    private int removeAvailablesValuesFromLinkedCells(Cell cell, Group group) {
+    public String toStringSimple() {
+        StringBuilder sb = new StringBuilder();
+        for (Group line : getLines()) {
+            for (Cell cell : line.getCells().values()) {
+                sb.append(cell.getValue())
+                        .append("(").append(cell.getCoordinates().getX())
+                        .append(",").append(cell.getCoordinates().getY())
+                        .append(")");
+            }
+            sb.append(System.lineSeparator());
+        }
+        return sb.toString();
+    }
+
+    private int removeAvailableValuesFromLinkedCells(Cell cell, Group group) {
         int removeAvailableCount = 0;
         for (Cell linkedCell : group.getCells().values()) {
             if (linkedCell.getAvailableValues().contains(cell.getValue())) {
