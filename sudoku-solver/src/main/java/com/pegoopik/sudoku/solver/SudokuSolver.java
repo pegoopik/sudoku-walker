@@ -17,6 +17,7 @@ public class SudokuSolver {
                     continue;
                 }
                 changedCount += ruleCase.getFunction().apply(sudoku);
+                System.out.println("changedCount = " + changedCount);
                 System.out.println(sudoku.toStringSimple());
             }
             if (changedCount == 0) {

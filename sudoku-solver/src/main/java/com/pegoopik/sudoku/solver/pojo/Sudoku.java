@@ -61,7 +61,7 @@ public class Sudoku {
                 int valuesIndex = (i-1) + SUDOKU_ROW_COUNT * (j-1);
                 Integer currentValue = values.get(valuesIndex);
                 PointXY coordinates = PointXY.of(i, j);
-                System.out.println("" + i + "-" + j + "=" + valuesIndex + "; " + currentValue + "; " + coordinates);
+                //System.out.println("" + i + "-" + j + "=" + valuesIndex + "; " + currentValue + "; " + coordinates);
                 if (currentValue >= 1 && currentValue <= SUDOKU_ROW_COUNT) {
                     removeAvailableCount +=
                             updateCellValue(coordinates, currentValue, CellStatus.FINAL);
@@ -92,13 +92,24 @@ public class Sudoku {
         for (Group line : getLines()) {
             for (Cell cell : line.getCells().values()) {
                 sb.append(cell.getValue())
-                        .append("(").append(cell.getCoordinates().getX())
+                        // для отладки можно раскомментировать, чтобы видеть координаты
+                        /*.append("(").append(cell.getCoordinates().getX())
                         .append(",").append(cell.getCoordinates().getY())
-                        .append(")");
+                        .append(")")*/;
             }
             sb.append(System.lineSeparator());
         }
         return sb.toString();
+    }
+
+    public String toStringDetails() {
+        char[][] cars = new char[SUDOKU_ROW_COUNT][SUDOKU_ROW_COUNT];
+        for (int i = 0; i < SUDOKU_ROW_COUNT; i++) {
+            for (int j = 0; j < SUDOKU_ROW_COUNT; j++) {
+
+            }
+        }
+        return "";
     }
 
     private int removeAvailableValuesFromLinkedCells(Cell cell, Group group) {
