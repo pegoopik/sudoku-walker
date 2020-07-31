@@ -41,19 +41,47 @@ public class Rules {
         // TODO: лучше перегруппировать, стартуя от ячеек, у которых нет решения и пробежаться по их возможных значениях - будет меньше итераций
         for (int candidateValue = 1; candidateValue <= Sudoku.SUDOKU_ROW_COUNT; candidateValue++) {
             for (Cell cell : sudoku.getCells().values()) {
-                int findValueCount = 0;
-                for (Cell mergeCell : cell.getLine().getCells().values()) {
-                    if (mergeCell.getValue().equals(candidateValue)) {
-                        findValueCount++;
-                    }
+                if (cell.getStatus().equals(CellStatus.FINAL) || cell.getStatus().equals(CellStatus.SOLVE)) {
+                    continue;
                 }
-                if (findValueCount == 1) {
-                    updatedCellCount +=
-                            sudoku.updateCellValue(cell.getCoordinates(), candidateValue, CellStatus.SOLVE);
-                }
+
+                updatedCellCount += setValueIfOneCandidateInGroupPrivate(sudoku, cell, cell.getLine(), candidateValue);
+                updatedCellCount += setValueIfOneCandidateInGroupPrivate(sudoku, cell, cell.getColumn(), candidateValue);
+                updatedCellCount += setValueIfOneCandidateInGroupPrivate(sudoku, cell, cell.getSquare(), candidateValue);
+//                int findValueCount = 0;
+//                for (Cell mergeCell : cell.getLine().getCells().values()) {
+//                    if (mergeCell.getStatus().equals(CellStatus.FINAL) || mergeCell.getStatus().equals(CellStatus.SOLVE)) {
+//                        continue;
+//                    }
+//                    if (mergeCell.getAvailableValues().contains(candidateValue)
+//                            && cell.getAvailableValues().contains(candidateValue)) {
+//                        findValueCount++;
+//                    }
+//                }
+//                if (findValueCount == 1) {
+//                    updatedCellCount +=
+//                            sudoku.updateCellValue(cell.getCoordinates(), candidateValue, CellStatus.SOLVE);
+//                }
             }
         }
         return updatedCellCount;
     }
+
+    private static int setValueIfOneCandidateInGroupPrivate(Sudoku sudoku, Cell cell, Group group, int candidateValue) {
+        int updatedCellCount = 0;
+        for (Cell mergeCell : group.getCells().values()) {
+            int findValueCount = 0;
+            if (mergeCell.getAvailableValues().contains(candidateValue)
+                    && cell.getAvailableValues().contains(candidateValue)) {
+                findValueCount++;
+            }
+            if (findValueCount == 1) {
+                updatedCellCount +=
+                        sudoku.updateCellValue(cell.getCoordinates(), candidateValue, CellStatus.SOLVE);
+            }
+        }
+        return updatedCellCount;
+    }
+
 
 }
