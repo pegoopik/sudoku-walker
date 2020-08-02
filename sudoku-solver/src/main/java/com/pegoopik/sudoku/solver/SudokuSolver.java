@@ -9,19 +9,34 @@ public class SudokuSolver {
 
     public static void solveByRules(Sudoku sudoku) {
         System.out.println(sudoku.toStringSimple());
-        int priority = 1;
+        int priority = 0;
         while (true) {
             int changedCount = 0;
             for(RuleCases ruleCase : RuleCases.values()) {
                 if (ruleCase.getPriority() > priority) {
                     continue;
                 }
-                changedCount += ruleCase.getFunction().apply(sudoku);
-                System.out.println("changedCount = " + changedCount);
-                System.out.println(sudoku.toStringSimple());
+                int currentChangeCount = ruleCase.getFunction().apply(sudoku);
+                changedCount += currentChangeCount;
+                System.out.println("Run " + ruleCase + " currentChangeCount = " + currentChangeCount);
+                if (currentChangeCount > 0) {
+                    System.out.println(sudoku.toStringSimple());
+                }
             }
             if (changedCount == 0) {
                 priority++;
+                System.out.println("Increment Rules priority value to " + priority);
+                for(RuleCases ruleCase : RuleCases.values()) {
+                    if (ruleCase.getPriority() == priority) {
+                        System.out.println("Add new Rule " + ruleCase);
+                        int currentChangeCount = ruleCase.getFunction().apply(sudoku);
+                        changedCount += currentChangeCount;
+                        System.out.println("Run " + ruleCase + " currentChangeCount = " + currentChangeCount);
+                        if (currentChangeCount > 0) {
+                            System.out.println(sudoku.toStringSimple());
+                        }
+                    }
+                }
             }
             if (priority > RuleCases.MAX_PRIORITY) {
                 break;
