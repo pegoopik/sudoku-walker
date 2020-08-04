@@ -5,10 +5,6 @@ import com.pegoopik.sudoku.solver.pojo.CellStatus;
 import com.pegoopik.sudoku.solver.pojo.Group;
 import com.pegoopik.sudoku.solver.pojo.Sudoku;
 
-import java.util.Arrays;
-import java.util.Set;
-import java.util.TreeSet;
-
 public class Rules {
 
     public static int removeAvailableValues(Sudoku sudoku) {
@@ -73,16 +69,16 @@ public class Rules {
 
     private static int setValueIfOneCandidateInGroupPrivate(Sudoku sudoku, Cell cell, Group group, int candidateValue) {
         int updatedCellCount = 0;
+        int findValueCount = 0;
         for (Cell mergeCell : group.getCells().values()) {
-            int findValueCount = 0;
             if (mergeCell.getAvailableValues().contains(candidateValue)
                     && cell.getAvailableValues().contains(candidateValue)) {
                 findValueCount++;
             }
-            if (findValueCount == 1) {
-                updatedCellCount +=
-                        sudoku.updateCellValue(cell.getCoordinates(), candidateValue, CellStatus.SOLVE);
-            }
+        }
+        if (findValueCount == 1) {
+            updatedCellCount +=
+                    sudoku.updateCellValue(cell.getCoordinates(), candidateValue, CellStatus.SOLVE);
         }
         return updatedCellCount;
     }

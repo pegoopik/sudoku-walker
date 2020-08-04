@@ -72,6 +72,7 @@ public class Sudoku {
     }
 
     public int updateCellValue(PointXY pointXY, Integer value, CellStatus status) {
+        System.out.println("new Cell value: " + pointXY + "; value=" + value);
         Cell cell = cells.get(pointXY);
         cell.setValue(value);
         cell.setStatus(status);
@@ -91,11 +92,7 @@ public class Sudoku {
         StringBuilder sb = new StringBuilder();
         for (Group line : getLines()) {
             for (Cell cell : line.getCells().values()) {
-                sb.append(cell.getValue())
-                        // для отладки можно раскомментировать, чтобы видеть координаты
-                        /*.append("(").append(cell.getCoordinates().getX())
-                        .append(",").append(cell.getCoordinates().getY())
-                        .append(")")*/;
+                sb.append(cell.getValue());
             }
             sb.append(System.lineSeparator());
         }
@@ -103,13 +100,23 @@ public class Sudoku {
     }
 
     public String toStringDetails() {
-        char[][] cars = new char[SUDOKU_ROW_COUNT][SUDOKU_ROW_COUNT];
-        for (int i = 0; i < SUDOKU_ROW_COUNT; i++) {
-            for (int j = 0; j < SUDOKU_ROW_COUNT; j++) {
-
+        StringBuilder sb = new StringBuilder();
+        sb.append(toStringSimple()).append(System.lineSeparator());
+        for (Group line : getLines()) {
+            for (Cell cell : line.getCells().values()) {
+                sb.append(
+                        String.format("%s:%s%s".concat(spaces(SUDOKU_ROW_COUNT)),
+                                cell.getValue(), cell.getStatus().getCode(),
+                                cell.getAvailableValues().toString().replaceAll(", ", "")).substring(0, 5 + SUDOKU_ROW_COUNT)
+                );
             }
+            sb.append(System.lineSeparator());
         }
-        return "";
+        return sb.toString();
+    }
+
+    private static String spaces(int length) {
+        return String.format("%1$"+length+ "s", " ");
     }
 
     private int removeAvailableValuesFromLinkedCells(Cell cell, Group group) {

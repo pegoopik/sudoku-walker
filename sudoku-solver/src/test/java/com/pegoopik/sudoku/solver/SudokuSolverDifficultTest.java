@@ -26,7 +26,6 @@ public class SudokuSolverDifficultTest {
         Sudoku sudoku = new Sudoku();
         sudoku.initCellsValues(getCellValuesFromResources("sudoku/difficult.txt"));
         SudokuSolver.solveByRules(sudoku);
-        System.out.println(sudoku.toStringSimple().trim());
         assertEquals(DIFFICULT_SOLVED_SUDOKU.trim(), sudoku.toStringSimple().trim());
     }
 

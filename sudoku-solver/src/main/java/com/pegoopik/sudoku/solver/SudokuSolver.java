@@ -20,7 +20,7 @@ public class SudokuSolver {
                 changedCount += currentChangeCount;
                 System.out.println("Run " + ruleCase + " currentChangeCount = " + currentChangeCount);
                 if (currentChangeCount > 0) {
-                    System.out.println(sudoku.toStringSimple());
+                    System.out.println(sudoku.toStringDetails());
                 }
             }
             if (changedCount == 0) {
@@ -33,7 +33,7 @@ public class SudokuSolver {
                         changedCount += currentChangeCount;
                         System.out.println("Run " + ruleCase + " currentChangeCount = " + currentChangeCount);
                         if (currentChangeCount > 0) {
-                            System.out.println(sudoku.toStringSimple());
+                            System.out.println(sudoku.toStringDetails());
                         }
                     }
                 }
@@ -42,6 +42,8 @@ public class SudokuSolver {
                 break;
             }
         }
+        System.out.println("Solve:");
+        System.out.println(sudoku.toStringSimple());
     }
 
 }
