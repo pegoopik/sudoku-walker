@@ -1,9 +1,9 @@
 package com.pegoopik.sudoku.solver.rules;
 
-import com.pegoopik.sudoku.solver.pojo.Cell;
-import com.pegoopik.sudoku.solver.pojo.CellStatus;
-import com.pegoopik.sudoku.solver.pojo.Group;
-import com.pegoopik.sudoku.solver.pojo.Sudoku;
+import com.pegoopik.sudoku.solver.pojo.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class Rules {
 
@@ -136,4 +136,50 @@ public class Rules {
         return 0;
     }
 
+
+    public static int only2in2inGroup(Sudoku sudoku) {
+        int changeCount = 0;
+        for (Group columns : sudoku.getLines()) {
+            changeCount += only2in2inGroupPrivate(columns);
+        }
+        for (Group columns : sudoku.getColumns()) {
+            changeCount += only2in2inGroupPrivate(columns);
+        }
+        for (Group columns : sudoku.getSquares()) {
+            changeCount += only2in2inGroupPrivate(columns);
+        }
+        return changeCount;
+    }
+
+    private static int only2in2inGroupPrivate(Group group) {
+        int changeCount = 0;
+        for (int first = 1; first <= Sudoku.SUDOKU_ROW_COUNT; first ++) {
+            for (int second = 1; second <= Sudoku.SUDOKU_ROW_COUNT; second ++) {
+                int coincidenceCount = 0;
+                int firstCount = 0;
+                int secondCount = 0;
+                Cell cellToUpdate = null;
+                for (Cell cell : group.getCells().values()) {
+                    if (cell.getAvailableValues().contains(first)
+                            || cell.getAvailableValues().contains(second)) {
+                        firstCount += cell.getAvailableValues().contains(first) ? 1 : 0;
+                        secondCount += cell.getAvailableValues().contains(second) ? 1 : 0;
+                        coincidenceCount++;
+                        if (cell.getAvailableValues().contains(first)
+                                && cell.getAvailableValues().contains(second)) {
+                            cellToUpdate = cell;
+                        }
+                    }
+                }
+                if (coincidenceCount == 3 && firstCount == 2 && secondCount == 2) {
+                    int beforeSize = cellToUpdate.getAvailableValues().size();
+                    cellToUpdate.getAvailableValues().clear();
+                    cellToUpdate.getAvailableValues().add(first);
+                    cellToUpdate.getAvailableValues().add(second);
+                    changeCount += beforeSize - 2;
+                }
+            }
+        }
+        return changeCount;
+    }
 }

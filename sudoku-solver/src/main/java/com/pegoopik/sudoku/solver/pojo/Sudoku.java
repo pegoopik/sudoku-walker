@@ -106,7 +106,7 @@ public class Sudoku {
             for (Cell cell : line.getCells().values()) {
                 sb.append(
                         String.format("%s:%s%s".concat(spaces(SUDOKU_ROW_COUNT)),
-                                cell.getValue(), cell.getStatus().getCode(),
+                                cell.getValue().toString().replace("0", "_"), cell.getStatus().getCode(),
                                 cell.getAvailableValues().toString().replaceAll(", ", "")).substring(0, 5 + SUDOKU_ROW_COUNT)
                 );
             }
