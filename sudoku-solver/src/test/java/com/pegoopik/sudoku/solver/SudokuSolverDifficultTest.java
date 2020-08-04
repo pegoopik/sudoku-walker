@@ -11,15 +11,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class SudokuSolverDifficultTest {
 
     private static final String DIFFICULT_SOLVED_SUDOKU =
-            "613879425\n" +
-            "924635178\n" +
-            "587124936\n" +
-            "498356217\n" +
-            "731982564\n" +
-            "256741893\n" +
-            "869513742\n" +
-            "345297681\n" +
-            "172468359";
+                    "632957841\n" +
+                    "491682573\n" +
+                    "785341269\n" +
+                    "248579316\n" +
+                    "319264785\n" +
+                    "576813924\n" +
+                    "124795638\n" +
+                    "967438152\n" +
+                    "853126497";
 
     @Test
     public void test() throws FileNotFoundException {

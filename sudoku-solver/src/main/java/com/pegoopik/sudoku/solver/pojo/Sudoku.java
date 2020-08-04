@@ -1,7 +1,10 @@
 package com.pegoopik.sudoku.solver.pojo;
 
+import com.google.common.base.Strings;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.SneakyThrows;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import java.util.*;
 
@@ -104,19 +107,23 @@ public class Sudoku {
         sb.append(toStringSimple()).append(System.lineSeparator());
         for (Group line : getLines()) {
             for (Cell cell : line.getCells().values()) {
+                if ((cell.getCoordinates().getX() - 1) % SUDOKU_SQUARE_SIZE == 0 && cell.getCoordinates().getX() > 1) {
+                    sb.append((char) 9608).append(" ");
+                }
                 sb.append(
-                        String.format("%s:%s%s".concat(spaces(SUDOKU_ROW_COUNT)),
-                                cell.getValue(), cell.getStatus().getCode(),
+                        String.format("%s:%s%s".concat(Strings.repeat(" ", SUDOKU_ROW_COUNT)),
+                                cell.getValue().toString().replace("0", "_"), cell.getStatus().getCode(),
                                 cell.getAvailableValues().toString().replaceAll(", ", "")).substring(0, 5 + SUDOKU_ROW_COUNT)
                 );
+            }
+            if ((line.getCells().values().iterator().next().getCoordinates().getY()) % SUDOKU_SQUARE_SIZE == 0
+                    && line.getCells().values().iterator().next().getCoordinates().getY() < SUDOKU_ROW_COUNT) {
+                sb.append(System.lineSeparator());
+                sb.append(Strings.repeat(String.valueOf((char) 9644), SUDOKU_ROW_COUNT * (SUDOKU_ROW_COUNT + 5) + SUDOKU_SQUARE_SIZE - 1));
             }
             sb.append(System.lineSeparator());
         }
         return sb.toString();
-    }
-
-    private static String spaces(int length) {
-        return String.format("%1$"+length+ "s", " ");
     }
 
     private int removeAvailableValuesFromLinkedCells(Cell cell, Group group) {
@@ -149,5 +156,13 @@ public class Sudoku {
             }
         }
         return group;
+    }
+
+    private static ObjectMapper objectMapper = new ObjectMapper();
+
+    @SneakyThrows
+    public Sudoku deepClone() {
+        String valueAsString = objectMapper.writeValueAsString(this);
+        return objectMapper.readValue(valueAsString, Sudoku.class);
     }
 }

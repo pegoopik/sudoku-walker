@@ -1,9 +1,11 @@
 package com.pegoopik.sudoku.solver.rules;
 
-import com.pegoopik.sudoku.solver.pojo.Cell;
-import com.pegoopik.sudoku.solver.pojo.CellStatus;
-import com.pegoopik.sudoku.solver.pojo.Group;
-import com.pegoopik.sudoku.solver.pojo.Sudoku;
+import com.pegoopik.sudoku.solver.pojo.*;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class Rules {
 
@@ -136,4 +138,86 @@ public class Rules {
         return 0;
     }
 
+
+    public static int only2in2inGroup(Sudoku sudoku) {
+        int changeCount = 0;
+        for (Group groups : sudoku.getLines()) {
+            changeCount += only2in2inGroupPrivate(groups);
+        }
+        for (Group groups : sudoku.getColumns()) {
+            changeCount += only2in2inGroupPrivate(groups);
+        }
+        for (Group groups : sudoku.getSquares()) {
+            changeCount += only2in2inGroupPrivate(groups);
+        }
+        return changeCount;
+    }
+
+    private static int only2in2inGroupPrivate(Group group) {
+        int changeCount = 0;
+        for (int first = 1; first < Sudoku.SUDOKU_ROW_COUNT; first ++) {
+            for (int second = first + 1; second <= Sudoku.SUDOKU_ROW_COUNT; second ++) {
+                int coincidenceCount = 0;
+                int firstCount = 0;
+                int secondCount = 0;
+                List<Cell> cellsToUpdate = new ArrayList<>();
+                for (Cell cell : group.getCells().values()) {
+                    if (cell.getAvailableValues().contains(first)
+                            || cell.getAvailableValues().contains(second)) {
+                        firstCount += cell.getAvailableValues().contains(first) ? 1 : 0;
+                        secondCount += cell.getAvailableValues().contains(second) ? 1 : 0;
+                        if (cell.getAvailableValues().contains(first)
+                                && cell.getAvailableValues().contains(second)) {
+                            coincidenceCount++;
+                            cellsToUpdate.add(cell);
+                        }
+                    }
+                }
+                if (coincidenceCount == 2 && firstCount == 2 && secondCount == 2) {
+                    for (Cell cellToUpdate : cellsToUpdate) {
+                        int beforeSize = cellToUpdate.getAvailableValues().size();
+                        String logString = "Remove aValues " + cellToUpdate.getCoordinates() + " " + cellToUpdate.getAvailableValues();
+                        cellToUpdate.getAvailableValues().clear();
+                        cellToUpdate.getAvailableValues().add(first);
+                        cellToUpdate.getAvailableValues().add(second);
+                        changeCount += beforeSize - 2;
+                        if (beforeSize - 2 > 0) {
+                            System.out.println(logString + "->" + cellToUpdate.getAvailableValues() + " " + group);
+                        }
+                    }
+                }
+            }
+//            for (int first = 1; first <= Sudoku.SUDOKU_ROW_COUNT; first ++) {
+//                for (int second = 1; second <= Sudoku.SUDOKU_ROW_COUNT; second ++) {
+//                    int coincidenceCount = 0;
+//                    int firstCount = 0;
+//                    int secondCount = 0;
+//                    Cell cellToUpdate = null;
+//                    for (Cell cell : group.getCells().values()) {
+//                        if (cell.getAvailableValues().contains(first)
+//                                || cell.getAvailableValues().contains(second)) {
+//                            firstCount += cell.getAvailableValues().contains(first) ? 1 : 0;
+//                            secondCount += cell.getAvailableValues().contains(second) ? 1 : 0;
+//                            coincidenceCount++;
+//                            if (cell.getAvailableValues().contains(first)
+//                                    && cell.getAvailableValues().contains(second)) {
+//                                cellToUpdate = cell;
+//                            }
+//                        }
+//                    }
+//                    if (coincidenceCount == 3 && firstCount == 2 && secondCount == 2) {
+//                        int beforeSize = cellToUpdate.getAvailableValues().size();
+//                        String logString = "Remove aValues " + cellToUpdate.getCoordinates() + " " + cellToUpdate.getAvailableValues();
+//                        cellToUpdate.getAvailableValues().clear();
+//                        cellToUpdate.getAvailableValues().add(first);
+//                        cellToUpdate.getAvailableValues().add(second);
+//                        changeCount += beforeSize - 2;
+//                        if (beforeSize - 2 > 0) {
+//                            System.out.println(logString + "->" + cellToUpdate.getAvailableValues() + " " + group);
+//                        }
+//                    }
+//                }
+        }
+        return changeCount;
+    }
 }
