@@ -1,6 +1,5 @@
 package com.pegoopik.sudoku.solver.case4x4;
 
-import org.apache.avro.mapred.Pair;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.*;
