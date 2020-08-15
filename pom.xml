@@ -40,18 +40,24 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>org.keycloak.bom</groupId>
-                <artifactId>keycloak-adapter-bom</artifactId>
-                <version>4.4.0.Final</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
                 <groupId>io.github.martinschneider</groupId>
                 <artifactId>testrail-maven-plugin</artifactId>
                 <version>1.1</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>
