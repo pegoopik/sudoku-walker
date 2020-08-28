@@ -4,7 +4,7 @@ import com.google.common.base.Strings;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.*;
 
@@ -15,6 +15,8 @@ public class Sudoku {
 
     public static int SUDOKU_SQUARE_SIZE = 3;
     public static int SUDOKU_ROW_COUNT = SUDOKU_SQUARE_SIZE * SUDOKU_SQUARE_SIZE;
+
+    private static ObjectMapper objectMapper = new ObjectMapper();
 
     // Список всех ячеек, он в некотором смысле излишен, может быть удобен в некоторых правилах
     private Map<PointXY, Cell> cells = new TreeMap<>();
@@ -157,8 +159,6 @@ public class Sudoku {
         }
         return group;
     }
-
-    private static ObjectMapper objectMapper = new ObjectMapper();
 
     @SneakyThrows
     public Sudoku deepClone() {

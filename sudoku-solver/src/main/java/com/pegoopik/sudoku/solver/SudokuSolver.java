@@ -2,9 +2,7 @@ package com.pegoopik.sudoku.solver;
 
 import com.pegoopik.sudoku.solver.pojo.Sudoku;
 import com.pegoopik.sudoku.solver.rules.RuleCases;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 public class SudokuSolver {
 
     public static void solveByRules(Sudoku sudoku) {
