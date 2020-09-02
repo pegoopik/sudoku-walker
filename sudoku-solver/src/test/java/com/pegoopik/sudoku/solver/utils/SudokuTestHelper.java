@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class SudokuTestHelper {
+import static com.pegoopik.sudoku.solver.pojo.Sudoku.SUDOKU_ROW_COUNT;
 
-    private static final int CHAR_COUNT_IN_LINE = 9;
+public class SudokuTestHelper {
 
     public static List<Integer> getCellValuesFromResources(String path) throws FileNotFoundException {
         List<Integer> result = new ArrayList<>();
@@ -21,7 +21,7 @@ public class SudokuTestHelper {
         List<String> collect = new BufferedReader(new InputStreamReader(stream))
                 .lines().collect(Collectors.toList());
         for (String line : collect) {
-            for (int i = 1; i <= CHAR_COUNT_IN_LINE; i++) {
+            for (int i = 1; i <= SUDOKU_ROW_COUNT; i++) {
                 result.add(Integer.parseInt(line.substring(i-1, i)));
             }
         }

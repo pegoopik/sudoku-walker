@@ -93,6 +93,7 @@ public class Sudoku {
         return removeAvailableCount;
     }
 
+    //TODO: need use com.pegoopik.sudoku.solver.utils.SudokuStrings
     public String toStringSimple() {
         StringBuilder sb = new StringBuilder();
         for (Group line : getLines()) {
