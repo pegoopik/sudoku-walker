@@ -1,6 +1,5 @@
 package com.pegoopik.sudoku.solver.case4x4;
 
-import com.pegoopik.sudoku.solver.utils.SudokuStrings;
 import lombok.Data;
 
 @Data

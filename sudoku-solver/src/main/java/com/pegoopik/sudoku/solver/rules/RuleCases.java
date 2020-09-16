@@ -11,8 +11,8 @@ public enum RuleCases {
     NO_AVAILABLE_VALUES_ON_EMPTY_CELL(1, ValidateRules::noAvailableValuesOnEmptyCell),
     REMOVE_AVAILABLE_VALUES(1, Rules::removeAvailableValues),
     AVAILABLE_COUNT_EQUALS_ONE(2, Rules::availableCountEqualsOne),
-    ONE_CELL_CANDIDATE_IN_GROUP(3, Rules::setValueIfOneCandidateInGroup), //TODO проверить
-    ENIGMA(4, Rules::enigmaRule), //TODO проверить
+    ONE_CELL_CANDIDATE_IN_GROUP(3, Rules::setValueIfOneCandidateInGroup),
+    ENIGMA(4, Rules::enigmaRule),
     ONLY_2_IN_2_IN_GROUP(5, Rules::only2in2inGroup),
     ;
 
