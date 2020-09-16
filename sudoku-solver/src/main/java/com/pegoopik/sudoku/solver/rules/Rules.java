@@ -50,20 +50,6 @@ public class Rules {
                 updatedCellCount += setValueIfOneCandidateInGroupPrivate(sudoku, cell, cell.getLine(), candidateValue);
                 updatedCellCount += setValueIfOneCandidateInGroupPrivate(sudoku, cell, cell.getColumn(), candidateValue);
                 updatedCellCount += setValueIfOneCandidateInGroupPrivate(sudoku, cell, cell.getSquare(), candidateValue);
-//                int findValueCount = 0;
-//                for (Cell mergeCell : cell.getLine().getCells().values()) {
-//                    if (mergeCell.getStatus().equals(CellStatus.FINAL) || mergeCell.getStatus().equals(CellStatus.SOLVE)) {
-//                        continue;
-//                    }
-//                    if (mergeCell.getAvailableValues().contains(candidateValue)
-//                            && cell.getAvailableValues().contains(candidateValue)) {
-//                        findValueCount++;
-//                    }
-//                }
-//                if (findValueCount == 1) {
-//                    updatedCellCount +=
-//                            sudoku.updateCellValue(cell.getCoordinates(), candidateValue, CellStatus.SOLVE);
-//                }
             }
         }
         return updatedCellCount;
@@ -95,22 +81,6 @@ public class Rules {
             updatedCellCount += enigmaProcessGroup(sudoku, sudoku.getColumns().get(groupIndex));
             updatedCellCount += enigmaProcessGroup(sudoku, sudoku.getSquares().get(groupIndex));
         }
-//        for (Cell cell : sudoku.getCells().values()) {
-//            //TODO: optimize
-//            Set<Integer> availableValues = new TreeSet<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
-//
-//            if (!cell.getValue().equals(0)) {
-//                continue;
-//            }
-//            boolean imAmReadyToSolve = false;
-//            int solvedCount = 0;
-//            for (Cell mergeCell : cell.getLine().getCells().values()) {
-//                cell.getAvailableValues().remove(mergeCell.getValue())
-//                if (!mergeCell.getValue().equals(0)) {
-//                    solvedCount++;
-//                }
-//            }
-//        }
         return updatedCellCount;
     }
 
@@ -187,36 +157,6 @@ public class Rules {
                     }
                 }
             }
-//            for (int first = 1; first <= Sudoku.SUDOKU_ROW_COUNT; first ++) {
-//                for (int second = 1; second <= Sudoku.SUDOKU_ROW_COUNT; second ++) {
-//                    int coincidenceCount = 0;
-//                    int firstCount = 0;
-//                    int secondCount = 0;
-//                    Cell cellToUpdate = null;
-//                    for (Cell cell : group.getCells().values()) {
-//                        if (cell.getAvailableValues().contains(first)
-//                                || cell.getAvailableValues().contains(second)) {
-//                            firstCount += cell.getAvailableValues().contains(first) ? 1 : 0;
-//                            secondCount += cell.getAvailableValues().contains(second) ? 1 : 0;
-//                            coincidenceCount++;
-//                            if (cell.getAvailableValues().contains(first)
-//                                    && cell.getAvailableValues().contains(second)) {
-//                                cellToUpdate = cell;
-//                            }
-//                        }
-//                    }
-//                    if (coincidenceCount == 3 && firstCount == 2 && secondCount == 2) {
-//                        int beforeSize = cellToUpdate.getAvailableValues().size();
-//                        String logString = "Remove aValues " + cellToUpdate.getCoordinates() + " " + cellToUpdate.getAvailableValues();
-//                        cellToUpdate.getAvailableValues().clear();
-//                        cellToUpdate.getAvailableValues().add(first);
-//                        cellToUpdate.getAvailableValues().add(second);
-//                        changeCount += beforeSize - 2;
-//                        if (beforeSize - 2 > 0) {
-//                            System.out.println(logString + "->" + cellToUpdate.getAvailableValues() + " " + group);
-//                        }
-//                    }
-//                }
         }
         return changeCount;
     }
