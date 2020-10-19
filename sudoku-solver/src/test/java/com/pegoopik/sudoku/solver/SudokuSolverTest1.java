@@ -8,7 +8,7 @@ import java.io.FileNotFoundException;
 import static com.pegoopik.sudoku.solver.utils.SudokuTestHelper.getCellValuesFromResources;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class SudokuSolverDifficultTest {
+public class SudokuSolverTest1 {
 
     private static final String DIFFICULT_SOLVED_SUDOKU =
                     "632957841" + System.lineSeparator() +
@@ -24,7 +24,7 @@ public class SudokuSolverDifficultTest {
     @Test
     public void test() throws FileNotFoundException {
         Sudoku sudoku = new Sudoku();
-        sudoku.initCellsValues(getCellValuesFromResources("sudoku/difficult.txt"));
+        sudoku.initCellsValues(getCellValuesFromResources("sudoku/test1.txt"));
         SudokuSolver.solveByRules(sudoku);
         assertEquals(DIFFICULT_SOLVED_SUDOKU.trim(), sudoku.toStringSimple().trim());
     }
